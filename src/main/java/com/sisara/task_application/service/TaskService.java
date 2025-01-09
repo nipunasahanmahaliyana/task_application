@@ -22,17 +22,6 @@ public class TaskService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private TaskDto convertToDto(Task task){
-        return modelMapper.map(task,TaskDto.class);
-    }
-
-        // Convert DTO to Entity
-    private Task convertToEntity(TaskDto taskDto) {
-        Task task = modelMapper.map(taskDto, Task.class);
-        task.setCreatedAt(LocalDateTime.now()); // Set additional fields if necessary
-        return task;
-    }
-
     public List<TaskDto> listTasks(){
         return taskRepository.findAll()
         .stream()
