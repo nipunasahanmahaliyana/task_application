@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sisara.task_application.dto.TaskDto;
+import com.sisara.task_application.exception.TaskInvalidStatusException;
 import com.sisara.task_application.exception.TaskNotExistException;
 import com.sisara.task_application.model.Task;
+import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.repository.TaskRepository;
 
 @Service
@@ -46,7 +48,6 @@ public class TaskService {
     }
 
     public  TaskDto updateTask(Long id,TaskDto taskDto){
-
         Task existingTask = taskRepository.findById(id)
             .orElseThrow(() -> new TaskNotExistException("Task not found with id: " + id));
 
@@ -63,4 +64,26 @@ public class TaskService {
         taskRepository.deleteById(id);
         return (modelMapper.map(optionalTask.get() ,TaskDto.class));
     }
+
+    public List<TaskDto> findTaskStatus(String status) {
+        List<Task> tasks;
+    
+        if (status != null && !status.isEmpty()) {
+            try {
+                Status statusEnum = Status.valueOf(status.toUpperCase());
+                tasks = taskRepository.findTaskByStatus(statusEnum); 
+            } catch (IllegalArgumentException e) {
+                throw new TaskInvalidStatusException("Invalid status value: " + status);
+            }
+        } else {
+
+            throw new TaskInvalidStatusException("Status cannot be null or empty.");
+        }
+    
+
+        return tasks.stream()
+                    .map(task -> modelMapper.map(task, TaskDto.class))
+                    .collect(Collectors.toList());
+    }
+    
 }
