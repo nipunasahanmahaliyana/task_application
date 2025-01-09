@@ -22,7 +22,8 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String tittle;
+
+    private String title;
     private String description;
     private Status status;
     private LocalDateTime createdAt;
