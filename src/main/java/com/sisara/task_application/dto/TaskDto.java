@@ -16,7 +16,7 @@ import lombok.Setter;
 public class TaskDto {
 
     private Long id;
-    private @NotNull String name;
+    private @NotNull String title;
     private @NotNull String description;
     private @NotNull Status status;
     private @NotNull LocalDateTime createdAt;

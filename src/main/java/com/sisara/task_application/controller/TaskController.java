@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sisara.task_application.dto.TaskDto;
 import com.sisara.task_application.model.Task;
 import com.sisara.task_application.service.TaskService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +20,8 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/tasks")
-    public List<Task> getAllTasks(){
-        List<Task> tasks = taskService.listTasks();
+    public List<TaskDto> getAllTasks(){
+        List<TaskDto> tasks = taskService.listTasks();
         return tasks;
     }
 
