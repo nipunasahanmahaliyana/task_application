@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.sisara.task_application.dto.TaskDto;
-import com.sisara.task_application.exception.TaskInvalidStatusException;
-import com.sisara.task_application.exception.TaskNotExistException;
 import com.sisara.task_application.model.Task;
 import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.repository.TaskRepository;
@@ -40,26 +38,19 @@ public class TaskService {
     }
 
     public TaskDto getTaskbyId(Long id){
-        if (!taskRepository.existsById(id))
-            throw new TaskNotExistException("Task id is invalid " + id);
-
         Optional<Task> optionalTask = taskRepository.findById(id);
         return (modelMapper.map(optionalTask.get() ,TaskDto.class));
     }
 
     public  TaskDto updateTask(Long id,TaskDto taskDto){
-        Task existingTask = taskRepository.findById(id)
-            .orElseThrow(() -> new TaskNotExistException("Task not found with id: " + id));
-
-        modelMapper.map(taskDto, existingTask);
-        Task updatedTask = taskRepository.save(existingTask);
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        modelMapper.map(taskDto, optionalTask);
+        Task updatedTask = taskRepository.save(optionalTask.get());
         return modelMapper.map(updatedTask, TaskDto.class);
     }
 
     public  TaskDto deleteTask(Long id){
-        if(!taskRepository.existsById(id))
-            throw new TaskNotExistException("Task is not found"+id);
-        
+    
         Optional<Task> optionalTask = taskRepository.findById(id);
         taskRepository.deleteById(id);
         return (modelMapper.map(optionalTask.get() ,TaskDto.class));
@@ -67,19 +58,9 @@ public class TaskService {
 
     public List<TaskDto> findTaskStatus(String status) {
         List<Task> tasks;
-    
-        if (status != null && !status.isEmpty()) {
-            try {
-                Status statusEnum = Status.valueOf(status.toUpperCase());
-                tasks = taskRepository.findTaskByStatus(statusEnum); 
-            } catch (IllegalArgumentException e) {
-                throw new TaskInvalidStatusException("Invalid status value: " + status);
-            }
-        } else {
 
-            throw new TaskInvalidStatusException("Status cannot be null or empty.");
-        }
-    
+        Status statusEnum = Status.valueOf(status.toUpperCase());
+        tasks = taskRepository.findTaskByStatus(statusEnum); 
 
         return tasks.stream()
                     .map(task -> modelMapper.map(task, TaskDto.class))
