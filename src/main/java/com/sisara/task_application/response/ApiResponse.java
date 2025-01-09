@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class ApiResponse<T> {
 
-    private  final boolean success;
-    private final String message;
+    private boolean success;
+    private String message;
     private T task;
     private List<T> tasks;
 
