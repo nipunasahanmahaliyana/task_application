@@ -1,6 +1,7 @@
 package com.sisara.task_application.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sisara.task_application.dto.TaskDto;
+import com.sisara.task_application.response.ApiResponse;
 import com.sisara.task_application.service.TaskService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,41 +26,45 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/tasks")
-    public ResponseEntity<List<TaskDto>> getAllTasks(){
+    public ResponseEntity<ApiResponse<TaskDto>> getAllTasks(){
         List<TaskDto> tasks = taskService.listTasks();
-        return ResponseEntity.ok(tasks);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Tasks Fetched",tasks),HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<TaskDto> addTask(@RequestBody TaskDto taskDto){
+    public ResponseEntity<ApiResponse<TaskDto>> addTask(@RequestBody TaskDto taskDto){
         TaskDto savedTask = taskService.createTask(taskDto);
-        return new ResponseEntity<>(savedTask,HttpStatus.OK);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Task Added",savedTask),HttpStatus.OK);
     }
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<TaskDto> getTasksbyId(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<TaskDto>> getTasksbyId(@PathVariable("id") Long id) {
         TaskDto taskDto = taskService.getTaskbyId(id);
-        return new ResponseEntity<>(taskDto,HttpStatus.OK);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Task found",taskDto),HttpStatus.OK);
     }
 
       @PutMapping("/update/{id}")
-    public ResponseEntity<TaskDto> updateTask(@PathVariable("id") Long id,TaskDto taskDto){
+    public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Long id,TaskDto taskDto){
         TaskDto updateTask = taskService.updateTask(id, taskDto);
-        return new ResponseEntity<>(updateTask,HttpStatus.OK);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Task updated",updateTask),HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<TaskDto> deleteTaskbyId(@PathVariable("id") Long id){
+    public ResponseEntity<ApiResponse<TaskDto>> deleteTaskbyId(@PathVariable("id") Long id){
         TaskDto taskDto = taskService.deleteTask(id);
-
-        return new ResponseEntity<>(taskDto,HttpStatus.OK);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Task Deleted ",taskDto),HttpStatus.OK);
     }
 
     @GetMapping("getbystatus/{status}")
-    public ResponseEntity<List<TaskDto>> putMethodName(@PathVariable("status") String status) {
+    public ResponseEntity<ApiResponse<TaskDto>> putMethodName(@PathVariable("status") String status) {
         
-        List<TaskDto> tasks = taskService.findTaskStatus(status);
-        
-        return new ResponseEntity<>(tasks,HttpStatus.OK);
+        List<TaskDto> taskDtos = taskService.findTaskStatus(status);
+        return new ResponseEntity<ApiResponse<TaskDto>>(
+        new ApiResponse<TaskDto>(true, "Task found for Status",taskDtos),HttpStatus.OK);
     }
 }
