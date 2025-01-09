@@ -1,5 +1,6 @@
 package com.sisara.task_application.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +26,24 @@ public class TaskService {
         return modelMapper.map(task,TaskDto.class);
     }
 
+        // Convert DTO to Entity
+    private Task convertToEntity(TaskDto taskDto) {
+        Task task = modelMapper.map(taskDto, Task.class);
+        task.setCreatedAt(LocalDateTime.now()); // Set additional fields if necessary
+        return task;
+    }
+
     public List<TaskDto> listTasks(){
-        List<Task> tasks = taskRepository.findAll();
-        return tasks.stream()
-        .map(this::convertToDto)
+        return taskRepository.findAll()
+        .stream()
+        .map(task -> modelMapper.map(task, TaskDto.class))
         .collect(Collectors.toList());
     }
 
-    public void createTask(@RequestBody Task task){
-        taskRepository.save(task);
+    public TaskDto createTask(@RequestBody TaskDto taskDto){
+        Task task = modelMapper.map(taskDto, Task.class);
+        Task savedTask = taskRepository.save(task);
+
+        return modelMapper.map(savedTask, TaskDto.class);
     }
 }

@@ -3,6 +3,7 @@ package com.sisara.task_application.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sisara.task_application.dto.TaskDto;
@@ -20,14 +21,14 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/tasks")
-    public List<TaskDto> getAllTasks(){
+    public ResponseEntity<List<TaskDto>> getAllTasks(){
         List<TaskDto> tasks = taskService.listTasks();
-        return tasks;
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping("/add")
-         public String addTask(@RequestBody Task task){
-        taskService.createTask(task);
-        return ("Created");
+    public ResponseEntity<TaskDto> addTask(@RequestBody TaskDto taskDto){
+        TaskDto savedTask = taskService.createTask(taskDto);
+        return ResponseEntity.ok(savedTask);
     }
 }
