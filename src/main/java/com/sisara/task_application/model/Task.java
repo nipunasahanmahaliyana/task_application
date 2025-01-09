@@ -3,6 +3,7 @@ package com.sisara.task_application.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +23,8 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String tittle;
+
+    private String title;
     private String description;
     private Status status;
     private LocalDateTime createdAt;
@@ -33,7 +35,9 @@ public class Task {
     }
 
     public enum Status {
-        PENDING,IN_PROGRESS,COMPLETED
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED
     }
 
 }
