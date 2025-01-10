@@ -1,11 +1,14 @@
 package com.sisara.task_application.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,7 +42,8 @@ public class TaskService {
 
     public TaskDto getTaskbyId(Long id){
         Optional<Task> optionalTask = taskRepository.findById(id);
-        return (modelMapper.map(optionalTask.get() ,TaskDto.class));
+        return optionalTask.map(task -> modelMapper.map(task, TaskDto.class))
+        .orElse(null);  
     }
 
     public  TaskDto updateTask(Long id,TaskDto taskDto){
@@ -61,10 +65,18 @@ public class TaskService {
 
         Status statusEnum = Status.valueOf(status.toUpperCase());
         tasks = taskRepository.findTaskByStatus(statusEnum); 
+        
+        if (tasks == null || tasks.isEmpty()) {
+            return Collections.emptyList(); 
+        }
 
         return tasks.stream()
                     .map(task -> modelMapper.map(task, TaskDto.class))
                     .collect(Collectors.toList());
+    }
+    
+    public Page<TaskDto> listTasksPage(Pageable pageable) {
+        return taskRepository.findAll(pageable).map(task -> modelMapper.map(task, TaskDto.class));
     }
     
 }
