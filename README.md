@@ -149,12 +149,3 @@ The project uses `ModelMapper` for object mapping, with custom configurations fo
 - **Integration Tests**: Using MockMvc to test API endpoints.
 - Logs are saved in `logs/test.log`.
 
-## Logging
-Logging is configured to save application logs in a file. The configuration is in `application.properties`:
-```properties
-logging.file.name=logs/test.log
-logging.level.org.springframework=INFO
-```
-
-## License
-This project is licensed under the MIT License.
