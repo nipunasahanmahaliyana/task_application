@@ -26,12 +26,15 @@ cd task-management-application
 ### 2. Run with H2 Database
 The application uses an H2 in-memory database, so no additional setup is required. Configuration is in the `application.properties` file:
 ```properties
+spring.application.name=task_application
 spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sisara_db
 spring.datasource.password=
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled=true
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=update
+
 ```
 
 You can access the H2 database console at [http://localhost:8080/h2-console](http://localhost:8080/h2-console).
