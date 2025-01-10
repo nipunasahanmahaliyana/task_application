@@ -28,7 +28,7 @@ The application uses an H2 in-memory database, so no additional setup is require
 ```properties
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=sa
+spring.datasource.username=sisara_db
 spring.datasource.password=
 spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
 spring.h2.console.enabled=true
