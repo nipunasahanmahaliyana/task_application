@@ -83,7 +83,7 @@ public class TaskController {
     
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<ApiResponse<TaskDto>> getTasksbyId(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<TaskDto>> getTasksbyId(@PathVariable("id") Integer id) {
         try {
             TaskDto taskDto = taskService.getTaskbyId(id);
     
@@ -108,7 +108,7 @@ public class TaskController {
 
 
       @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Long id,TaskDto taskDto){
+    public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Integer id,TaskDto taskDto){
         try {
             TaskDto taskDtoValid = taskService.getTaskbyId(id);
 
@@ -142,7 +142,7 @@ public class TaskController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<TaskDto>> deleteTaskbyId(@PathVariable("id") Long id){
+    public ResponseEntity<ApiResponse<TaskDto>> deleteTaskbyId(@PathVariable("id") Integer id){
         try {
             TaskDto taskDtoValid = taskService.getTaskbyId(id);
 
