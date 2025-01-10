@@ -2,8 +2,6 @@ package com.sisara.task_application.dto;
 
 import java.time.LocalDateTime;
 
-import com.sisara.task_application.model.Task.Status;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +15,14 @@ public class TaskDto {
     private int id;
     private String title;
     private String description;
-    private Status status;
+    private StatusDto status;
     private LocalDateTime createdAt;
 
+    public enum StatusDto {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED
+    }
 
 
 }

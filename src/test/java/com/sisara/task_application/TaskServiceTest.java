@@ -1,7 +1,6 @@
 package com.sisara.task_application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import static org.mockito.BDDMockito.willDoNothing;
 import org.springframework.data.domain.PageImpl;
@@ -27,11 +25,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.sisara.task_application.dto.TaskDto;
+import com.sisara.task_application.dto.TaskDto.StatusDto;
 import com.sisara.task_application.model.Task;
 import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.repository.TaskRepository;
 import com.sisara.task_application.service.TaskService;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 public class TaskServiceTest {
 
@@ -44,6 +45,7 @@ public class TaskServiceTest {
     TaskService taskService;
     private Task task;
     private TaskDto taskDto;
+    private static final Logger logger = LogManager.getLogger(TaskServiceTest.class);
 
     @BeforeEach
     public void setup() {
@@ -57,13 +59,16 @@ public class TaskServiceTest {
         taskDto.setId(1);
         taskDto.setTitle("Test Task");
         taskDto.setDescription("Test Description");
-        taskDto.setStatus(Status.PENDING);
+        taskDto.setStatus(StatusDto.PENDING);
     }
 
     @DisplayName("JUnit test for listTasks method")
     @Test
     public void givenTasksList_whenListTasks_thenReturnTaskDtoList() {
  
+        logger.info("Starting testServiceMethod");
+        // Your test logic here
+        
         List<Task> tasks = List.of(task);
         given(taskRepository.findAll()).willReturn(tasks);
         given(modelMapper.map(task, TaskDto.class)).willReturn(taskDto);
@@ -71,6 +76,8 @@ public class TaskServiceTest {
         assertThat(taskDtos).isNotNull();
         assertThat(taskDtos.size()).isEqualTo(1);
         assertThat(taskDtos.get(0).getTitle()).isEqualTo("Test Task");
+
+        logger.info("Finished testServiceMethod");
     }
 
     @DisplayName("JUnit test for createTask method")
@@ -176,7 +183,7 @@ public void givenPageable_whenListTasksPage_thenReturnTaskDtoPage() {
         List<Task> tasks = Arrays.asList(task);
         when(taskRepository.findAll()).thenReturn(tasks);
 
-        TaskDto taskDto = new TaskDto(1, "Task 1", "Test description", Status.PENDING, LocalDateTime.now());
+        TaskDto taskDto = new TaskDto(1, "Task 1", "Test description", StatusDto.PENDING, LocalDateTime.now());
 
         when(modelMapper.map(task, TaskDto.class)).thenReturn(taskDto);
 
