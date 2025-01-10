@@ -24,24 +24,8 @@ import com.sisara.task_application.dto.TaskDto;
 import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.service.TaskService;
 
-@ExtendWith(SpringExtension.class)  // For JUnit 5 support
-@SpringBootTest
 public class TaskControllerIntegrationTest {
-    private MockMvc mockMvc;
-
-    @Mock
-    TaskService taskService;
-
-    @InjectMocks
-     TaskController taskController;
-
-    private ObjectMapper objectMapper;
-
-    @BeforeEach
-    public void setup() {
-        objectMapper = new ObjectMapper();
-        mockMvc = MockMvcBuilders.standaloneSetup(taskController).build();
-    }
+    
 
     
 }

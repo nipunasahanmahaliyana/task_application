@@ -31,7 +31,9 @@ import com.sisara.task_application.model.Task;
 import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.repository.TaskRepository;
 import com.sisara.task_application.service.TaskService;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 public class TaskServiceTest {
 
@@ -44,6 +46,7 @@ public class TaskServiceTest {
     TaskService taskService;
     private Task task;
     private TaskDto taskDto;
+    private static final Logger logger = LogManager.getLogger(TaskServiceTest.class);
 
     @BeforeEach
     public void setup() {
@@ -64,6 +67,9 @@ public class TaskServiceTest {
     @Test
     public void givenTasksList_whenListTasks_thenReturnTaskDtoList() {
  
+        logger.info("Starting testServiceMethod");
+        // Your test logic here
+        
         List<Task> tasks = List.of(task);
         given(taskRepository.findAll()).willReturn(tasks);
         given(modelMapper.map(task, TaskDto.class)).willReturn(taskDto);
@@ -71,6 +77,8 @@ public class TaskServiceTest {
         assertThat(taskDtos).isNotNull();
         assertThat(taskDtos.size()).isEqualTo(1);
         assertThat(taskDtos.get(0).getTitle()).isEqualTo("Test Task");
+
+        logger.info("Finished testServiceMethod");
     }
 
     @DisplayName("JUnit test for createTask method")

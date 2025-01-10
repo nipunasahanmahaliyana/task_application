@@ -165,7 +165,6 @@ public class TaskController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     
         } catch (Exception ex) {
-            // Handle any other unexpected errors
             ApiResponse<TaskDto> response = new ApiResponse<>(false, "An unexpected error occurred", null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -175,9 +174,7 @@ public class TaskController {
     public ResponseEntity<ApiResponse<TaskDto>> getByStatus(@PathVariable("status") String status) {
         
         try {
-
             List<TaskDto> taskDtos = taskService.findTaskStatus(status);
-    
             if (taskDtos.isEmpty()) {
                 throw new ResourceNotFoundException("No tasks found with status: " + status);
             }
@@ -191,24 +188,22 @@ public class TaskController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     
         } catch (ResourceNotFoundException ex) {
-
             ApiResponse<TaskDto> response = new ApiResponse<>(false, ex.getMessage(), null);
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     
         } catch (Exception ex) {
-
             ApiResponse<TaskDto> response = new ApiResponse<>(false, "An unexpected error occurred", null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-@GetMapping("/tasksPage")
-public ResponseEntity<ApiResponse<Page<TaskDto>>> getAllTasks(
-        @RequestParam(value = "page", defaultValue = "0") int page,
-        @RequestParam(value = "size", defaultValue = "10") int size,
-        @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-        @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
-    try {
+    @GetMapping("/tasksPage")
+    public ResponseEntity<ApiResponse<Page<TaskDto>>> getAllTasks(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
+        try {
 
         Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
