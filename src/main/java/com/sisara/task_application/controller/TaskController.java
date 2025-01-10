@@ -108,7 +108,7 @@ public class TaskController {
 
 
       @PutMapping("/update/{id}")
-    public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Integer id,TaskDto taskDto){
+    public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Integer id,@RequestBody TaskDto taskDto){
         try {
             TaskDto taskDtoValid = taskService.getTaskbyId(id);
 

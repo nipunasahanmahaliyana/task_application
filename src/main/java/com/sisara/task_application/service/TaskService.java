@@ -17,6 +17,8 @@ import com.sisara.task_application.model.Task;
 import com.sisara.task_application.model.Task.Status;
 import com.sisara.task_application.repository.TaskRepository;
 
+import org.modelmapper.PropertyMap;
+
 @Service
 public class TaskService {
 
@@ -46,12 +48,23 @@ public class TaskService {
         .orElse(null);  
     }
 
-    public  TaskDto updateTask(Integer id,TaskDto taskDto){
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        modelMapper.map(taskDto, optionalTask);
-        Task updatedTask = taskRepository.save(optionalTask.get());
-        return modelMapper.map(updatedTask, TaskDto.class);
-    }
+public TaskDto updateTask(Integer id, @RequestBody TaskDto taskDto) {
+
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper.addMappings(new PropertyMap<TaskDto,Task>() {
+        protected void configure() {
+            map(source.getId(), destination.getId());
+            map(source.getTitle(), destination.getTitle());
+            map(source.getDescription(), destination.getDescription());
+            map(source.getStatus(), destination.getStatus());  
+        }
+    });
+    Task updatedTask = modelMapper.map(taskDto, Task.class);
+    Task  savedTask = taskRepository.save(updatedTask);
+    
+    return modelMapper.map(savedTask, TaskDto.class);
+}
+
 
     public  TaskDto deleteTask(Integer id){
     
@@ -60,20 +73,35 @@ public class TaskService {
         return (modelMapper.map(optionalTask.get() ,TaskDto.class));
     }
 
+
+    
     public List<TaskDto> findTaskStatus(String status) {
         List<Task> tasks;
-
+    
+        // Convert the string status to the Status enum
         Status statusEnum = Status.valueOf(status.toUpperCase());
-        tasks = taskRepository.findTaskByStatus(statusEnum); 
-        
+        tasks = taskRepository.findTaskByStatus(statusEnum);
+    
         if (tasks == null || tasks.isEmpty()) {
-            return Collections.emptyList(); 
+            return Collections.emptyList();
         }
-
+    
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(new PropertyMap<Task, TaskDto>() {
+            protected void configure() {
+                map(source.getId(), destination.getId());
+                map(source.getTitle(), destination.getTitle());
+                map(source.getDescription(), destination.getDescription());
+                map(source.getCreatedAt(), destination.getCreatedAt());
+                map(source.getStatus(), destination.getStatus());  
+            }
+        });
+    
         return tasks.stream()
-                    .map(task -> modelMapper.map(task, TaskDto.class))
-                    .collect(Collectors.toList());
+                .map(task -> modelMapper.map(task, TaskDto.class))
+                .collect(Collectors.toList());
     }
+    
     
     public Page<TaskDto> listTasksPage(Pageable pageable) {
         return taskRepository.findAll(pageable).map(task -> modelMapper.map(task, TaskDto.class));

@@ -1,11 +1,9 @@
 package com.sisara.task_application;
 
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +15,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.sisara.task_application.dto.TaskDto;
+import com.sisara.task_application.dto.TaskDto.StatusDto;
 import com.sisara.task_application.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
-import com.sisara.task_application.model.Task;
 
 @SpringBootTest
 public class TaskControllerIntegrationTest {
@@ -41,7 +38,7 @@ public class TaskControllerIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        taskDto = new TaskDto(1, "Test Task", "Description", Task.Status.PENDING, null);
+        taskDto = new TaskDto(1, "Test Task", "Description", StatusDto.PENDING,LocalDateTime.now());
     }
     
         @Test
@@ -83,7 +80,7 @@ public class TaskControllerIntegrationTest {
 
     @Test
     public void testUpdateTask() throws Exception {
-        TaskDto updatedTask = new TaskDto(1, "Updated Task", "Updated Description", Task.Status.COMPLETED, null);
+        TaskDto updatedTask = new TaskDto(1, "Updated Task", "Updated Description", StatusDto.COMPLETED,LocalDateTime.now());
         when(taskService.updateTask(1, updatedTask)).thenReturn(updatedTask);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/update/{id}", 1)
