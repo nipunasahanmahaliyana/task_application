@@ -1,5 +1,6 @@
 package com.sisara.task_application.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +42,8 @@ public class TaskService {
 
     public TaskDto getTaskbyId(Long id){
         Optional<Task> optionalTask = taskRepository.findById(id);
-        return (modelMapper.map(optionalTask.get() ,TaskDto.class));
+        return optionalTask.map(task -> modelMapper.map(task, TaskDto.class))
+        .orElse(null);  
     }
 
     public  TaskDto updateTask(Long id,TaskDto taskDto){
@@ -63,6 +65,10 @@ public class TaskService {
 
         Status statusEnum = Status.valueOf(status.toUpperCase());
         tasks = taskRepository.findTaskByStatus(statusEnum); 
+        
+        if (tasks == null || tasks.isEmpty()) {
+            return Collections.emptyList(); 
+        }
 
         return tasks.stream()
                     .map(task -> modelMapper.map(task, TaskDto.class))

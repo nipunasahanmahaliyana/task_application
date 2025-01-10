@@ -111,18 +111,18 @@ public class TaskController {
       @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse<TaskDto>> updateTask(@PathVariable("id") Long id,TaskDto taskDto){
         try {
-            TaskDto updatedTask = taskService.updateTask(id, taskDto);
-    
-            if (updatedTask == null) {
-                throw new ResourceNotFoundException("Task is invalid,put a valid one");
-            }
-            
             TaskDto taskDtoValid = taskService.getTaskbyId(id);
 
             if (taskDtoValid == null) {
                 throw new ResourceNotFoundException("Task with ID " + id + " not found.");
             }
     
+            TaskDto updatedTask = taskService.updateTask(id, taskDto);
+    
+            if (updatedTask == null) {
+                throw new BadRequestException("Task is invalid,put a valid one");
+            }
+            
             ApiResponse<TaskDto> response = new ApiResponse<>(true, "Task updated", updatedTask);
             return new ResponseEntity<>(response, HttpStatus.OK);
     
@@ -140,10 +140,17 @@ public class TaskController {
         }
     }
 
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<TaskDto>> deleteTaskbyId(@PathVariable("id") Long id){
         try {
+            TaskDto taskDtoValid = taskService.getTaskbyId(id);
 
+            if (taskDtoValid == null) {
+                throw new ResourceNotFoundException("Task with ID " + id + " not found.");
+            }
+            
             TaskDto deletedTask = taskService.deleteTask(id);
 
             if (deletedTask == null) {
