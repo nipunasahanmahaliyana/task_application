@@ -70,7 +70,8 @@ The application will start on [http://localhost:8080](http://localhost:8080).
 ### 4. Test the APIs
 You can use tools like Postman or cURL to test the API endpoints. Example endpoints:
 - `GET /tasks`: Fetch all tasks. - http://localhost:8080/tasks
-- `POST /add`: Add a new task. - http://localhost:8080/add 
+- `POST /add`: Add a new task. - http://localhost:8080/add
+  status can only equal to  (PENDING, IN_PROGRESS, COMPLETED) ,there for i used enum for that.
   body: {
     "title": "Write Unit Tests",
     "description":"Testing",
