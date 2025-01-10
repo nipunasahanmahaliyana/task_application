@@ -115,7 +115,7 @@ public void testGetTasks() throws Exception {
 3. Verify the response structure matches the `ApiResponse` format.
 
 ## Summary of Implementation
-
+  - used Lombook dependency for generate Getters, setters, and constructors
 ### APIResponse Class
 The `ApiResponse` class is a generic wrapper used to structure API responses with metadata:
 ```java
@@ -129,6 +129,7 @@ public class ApiResponse<T> {
 
 ### Exception Classes
 Custom exceptions are created to handle specific scenarios:
+Ex:
 - `BadRequestException`: Thrown for invalid input.
 - `ResourceNotFoundException`: Thrown when a resource is not found.
 - `DataIntegrityViolationException`: Thrown for database constraint violations.
