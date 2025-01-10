@@ -40,20 +40,20 @@ public class TaskService {
         return modelMapper.map(savedTask, TaskDto.class);
     }
 
-    public TaskDto getTaskbyId(Long id){
+    public TaskDto getTaskbyId(int id){
         Optional<Task> optionalTask = taskRepository.findById(id);
         return optionalTask.map(task -> modelMapper.map(task, TaskDto.class))
         .orElse(null);  
     }
 
-    public  TaskDto updateTask(Long id,TaskDto taskDto){
+    public  TaskDto updateTask(Integer id,TaskDto taskDto){
         Optional<Task> optionalTask = taskRepository.findById(id);
         modelMapper.map(taskDto, optionalTask);
         Task updatedTask = taskRepository.save(optionalTask.get());
         return modelMapper.map(updatedTask, TaskDto.class);
     }
 
-    public  TaskDto deleteTask(Long id){
+    public  TaskDto deleteTask(Integer id){
     
         Optional<Task> optionalTask = taskRepository.findById(id);
         taskRepository.deleteById(id);
